@@ -307,15 +307,6 @@
             color: #4299e1;
         }
 
-        .result {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background: #f0f9ff;
-            border: 2px solid #bfdbfe;
-            border-radius: 8px;
-        }
-
         .file-upload {
             border: 2px dashed #4299e1;
             border-radius: 8px;
@@ -335,23 +326,13 @@
             border-color: #3b82f6;
         }
 
-        .comparison-section {
-            margin-top: 20px;
-        }
-
         /* Dashboard Display Styles */
         .dashboard-display {
             margin-top: 30px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             overflow: hidden;
-        }
-
-        .dashboard-frame {
-            width: 100%;
-            height: 800px;
-            border: none;
-            background: #f8fafc;
+            display: none;
         }
 
         .dashboard-header {
@@ -412,7 +393,7 @@
 
         <div class="main-content">
             <div class="navigation-tiles">
-                <div class="nav-tile active" onclick="handleNavigation('generate')">
+                <div class="nav-tile" onclick="handleNavigation('generate')">
                     <div class="nav-tile-icon">📊</div>
                     <h3>Generate Risk Database</h3>
                     <p>Create comprehensive risk assessments for your infrastructure projects</p>
@@ -424,21 +405,21 @@
                     <p>Analyze multiple risk databases and create detailed comparison reports</p>
                 </div>
 
-                <div class="nav-tile" onclick="handleNavigation('compare-dashboard')">
+                <div class="nav-tile active" onclick="handleNavigation('compare-dashboard')">
                     <div class="nav-tile-icon">📈</div>
                     <h3>Compare Risk Databases & Generate Dashboard</h3>
                     <p>Visualize risk comparisons through interactive dashboards</p>
                 </div>
 
-                <div class="nav-tile" onclick="handleNavigation('generate-dashboard')">
-                    <div class="nav-tile-icon">🎯</div>
-                    <h3>Generate Risk Dashboard</h3>
-                    <p>Create interactive risk management dashboards for project visualization</p>
+                <div class="nav-tile" onclick="handleNavigation('knowledge-base')">
+                    <div class="nav-tile-icon">📚</div>
+                    <h3>Knowledge Base</h3>
+                    <p>Access risk management resources, guidelines, and best practices</p>
                 </div>
             </div>
 
             <!-- Generate Risk Database Form -->
-            <div id="generate-form" class="form-section active">
+            <div id="generate-form" class="form-section">
                 <div class="section-title">
                     <div class="section-icon">🏗️</div>
                     Project Information
@@ -575,66 +556,6 @@
                 <button class="submit-button" onclick="generateRiskRegister()">🚀 Generate AI Risk Register</button>
             </div>
 
-            <!-- Generate Dashboard Form -->
-            <div id="generate-dashboard-form" class="form-section">
-                <div class="section-title">
-                    <div class="section-icon">🎯</div>
-                    Dashboard Generation
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="dashboard-project-name">Project Name *</label>
-                        <input type="text" id="dashboard-project-name" placeholder="Enter project name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dashboard-project-type">Project Type *</label>
-                        <select id="dashboard-project-type" required>
-                            <option value="">Select project type</option>
-                            <option value="road">Road</option>
-                            <option value="bridge">Bridge</option>
-                            <option value="viaduct">Viaduct</option>
-                            <option value="river">River</option>
-                            <option value="recreational">Recreational Zone</option>
-                            <option value="wastewater">Wastewater Plant</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="dashboard-project-duration">Project Duration *</label>
-                        <select id="dashboard-project-duration" required>
-                            <option value="">Select duration</option>
-                            <option value="up-to-6m">Up to 6 months</option>
-                            <option value="6-12m">6–12 months</option>
-                            <option value="1-2y">1–2 years</option>
-                            <option value="2-3y">2–3 years</option>
-                            <option value="more-3y">More than 3 years</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="dashboard-project-budget">Project Budget *</label>
-                        <select id="dashboard-project-budget" required>
-                            <option value="">Select budget range</option>
-                            <option value="under-100k">< €100,000</option>
-                            <option value="100k-500k">€100,000–€500,000</option>
-                            <option value="500k-1m">€500,000–€1M</option>
-                            <option value="1m-5m">€1M–€5M</option>
-                            <option value="5m-10m">€5M–€10M</option>
-                            <option value="over-10m">> €10M</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="dashboard-project-location">Project Location *</label>
-                        <input type="text" id="dashboard-project-location" placeholder="Enter project location" value="Netherlands" required>
-                    </div>
-                    <div class="form-group comments-section">
-                        <label for="dashboard-comments">Additional Context</label>
-                        <textarea id="dashboard-comments" placeholder="Enter any specific requirements for the dashboard or additional project context..."></textarea>
-                    </div>
-                </div>
-
-                <button class="submit-button" onclick="generateDashboard()">🎯 Generate Interactive Dashboard</button>
-            </div>
-
             <!-- Compare Registers Form -->
             <div id="compare-form" class="form-section">
                 <div class="section-title">
@@ -668,13 +589,44 @@
                 </div>
             </div>
 
+            <!-- Compare & Dashboard Form -->
+            <div id="compare-dashboard-form" class="form-section active">
+                <div class="section-title">
+                    <div class="section-icon">📈</div>
+                    Risk Register Comparison & Dashboard Generation
+                </div>
+                
+                <div class="file-upload" onclick="document.getElementById('dashboard-file1').click()">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+                    <h3>Upload First Risk Register (Period 1)</h3>
+                    <p>Click to select or drag & drop (.xlsx, .csv, .xls)</p>
+                    <input type="file" id="dashboard-file1" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleDashboardFileUpload(1, this)">
+                    <div id="dashboard-file1-info" style="margin-top: 10px; font-weight: bold; color: #4299e1;"></div>
+                </div>
+
+                <div class="file-upload" onclick="document.getElementById('dashboard-file2').click()">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+                    <h3>Upload Second Risk Register (Period 2)</h3>
+                    <p>Click to select or drag & drop (.xlsx, .csv, .xls)</p>
+                    <input type="file" id="dashboard-file2" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleDashboardFileUpload(2, this)">
+                    <div id="dashboard-file2-info" style="margin-top: 10px; font-weight: bold; color: #4299e1;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dashboardComparisonContext">Comparison Context (Optional)</label>
+                    <textarea id="dashboardComparisonContext" placeholder="Provide context about what changed between these periods, specific areas to focus on, project details, or any other relevant information for the dashboard generation..."></textarea>
+                </div>
+
+                <button class="submit-button" onclick="compareAndGenerateDashboard()" disabled id="dashboardCompareBtn">📈 Compare & Generate Interactive Dashboard</button>
+            </div>
+
             <div class="loading" id="loading">
                 <div style="font-size: 48px;">⏳</div>
                 <h3>Processing your request...</h3>
                 <p>AI is analyzing your data and generating the report. This may take a few minutes.</p>
             </div>
 
-            <div class="result" id="result">
+            <div class="result" id="result" style="display: none; margin-top: 30px; padding: 20px; background: #f0f9ff; border: 2px solid #bfdbfe; border-radius: 8px;">
                 <h3>✅ Analysis Complete!</h3>
                 <p id="result-text"></p>
                 <div id="report-content" style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; white-space: pre-wrap; max-height: 500px; overflow-y: auto;"></div>
@@ -682,7 +634,7 @@
             </div>
 
             <!-- Dashboard Display Section -->
-            <div class="dashboard-display" id="dashboard-display" style="display: none;">
+            <div class="dashboard-display" id="dashboard-display">
                 <div class="dashboard-header">
                     <div class="dashboard-title">📊 Interactive Risk Dashboard</div>
                     <button class="download-dashboard-btn" onclick="downloadDashboard()">💾 Download Dashboard</button>
@@ -693,27 +645,32 @@
     </div>
 
     <script>
-        let currentMode = 'generate';
+        let currentMode = 'compare-dashboard';
         let uploadedFiles = { file1: null, file2: null };
+        let dashboardFiles = { file1: null, file2: null };
         let lastResult = null;
         let lastDashboard = null;
 
         // ✅ WEBHOOK URLs - Update these with your actual n8n URLs!
         const WEBHOOK_URL = 'https://riskapp.app.n8n.cloud/webhook/webhook-test/risk-webapp';
-        const DASHBOARD_WEBHOOK_URL = 'https://riskapp.app.n8n.cloud/webhook-test/webhook-test/risk-dashboard';
+        const DASHBOARD_WEBHOOK_URL = 'https://riskapp.app.n8n.cloud/webhook-test/risk-dashboard';
 
         function handleNavigation(section) {
             currentMode = section;
             
             // Add visual feedback
-            event.target.closest('.nav-tile').style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                event.target.closest('.nav-tile').style.transform = '';
-            }, 150);
+            if (event && event.target) {
+                event.target.closest('.nav-tile').style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    event.target.closest('.nav-tile').style.transform = '';
+                }, 150);
+            }
             
             // Update active tile
             document.querySelectorAll('.nav-tile').forEach(tile => tile.classList.remove('active'));
-            event.target.closest('.nav-tile').classList.add('active');
+            if (event && event.target) {
+                event.target.closest('.nav-tile').classList.add('active');
+            }
             
             // Show/hide forms based on selection
             document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
@@ -723,11 +680,8 @@
                 document.getElementById('generate-form').classList.add('active');
             } else if (section === 'compare-report') {
                 document.getElementById('compare-form').classList.add('active');
-            } else if (section === 'generate-dashboard') {
-                document.getElementById('generate-dashboard-form').classList.add('active');
             } else if (section === 'compare-dashboard') {
-                // Show alert for now - you can implement this later
-                alert('Feature coming soon: ' + section.replace('-', ' ').toUpperCase());
+                document.getElementById('compare-dashboard-form').classList.add('active');
             } else {
                 // For other options, show alert
                 alert('Feature coming soon: ' + section.replace('-', ' ').toUpperCase());
@@ -763,8 +717,44 @@
             }
         }
 
+        function handleDashboardFileUpload(fileNumber, input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            const validTypes = ['.xlsx', '.xls', '.csv'];
+            const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+            
+            if (!validTypes.includes(fileExtension)) {
+                alert('Please upload only Excel (.xlsx, .xls) or CSV files.');
+                return;
+            }
+            
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB.');
+                return;
+            }
+            
+            dashboardFiles[`file${fileNumber}`] = file;
+            document.getElementById(`dashboard-file${fileNumber}-info`).textContent = `✅ ${file.name}`;
+            
+            // Enable compare button if both files uploaded
+            if (dashboardFiles.file1 && dashboardFiles.file2) {
+                document.getElementById('dashboardCompareBtn').disabled = false;
+                document.getElementById('dashboardCompareBtn').textContent = '📈 Compare & Generate Interactive Dashboard';
+            }
+        }
+
         async function generateRiskRegister() {
             // Collect form data
             const formData = {
                 mode: 'generate_new',
-                projectName: document.getElementById('project-name
+                projectName: document.getElementById('project-name').value,
+                projectType: document.getElementById('project-type').value,
+                projectPhase: document.getElementById('project-phase').value,
+                projectTimeline: document.getElementById('project-duration').value,
+                countryRegion: document.getElementById('project-location').value,
+                budgetRange: document.getElementById('project-budget').value,
+                contractForm: document.getElementById('contract-form').value,
+                clientType: document.

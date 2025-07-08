@@ -99,7 +99,7 @@
 
         .navigation-tiles {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
@@ -366,22 +366,10 @@
 
         <div class="main-content">
             <div class="navigation-tiles">
-                <div class="nav-tile" onclick="handleNavigation('generate')">
-                    <div class="nav-tile-icon">📊</div>
-                    <h3>Generate Risk Database</h3>
-                    <p>Create comprehensive risk assessments for your infrastructure projects</p>
-                </div>
-
-                <div class="nav-tile" onclick="handleNavigation('compare-report')">
-                    <div class="nav-tile-icon">📋</div>
-                    <h3>Compare Risk Databases & Generate Report</h3>
-                    <p>Analyze multiple risk databases and create detailed comparison reports</p>
-                </div>
-
                 <div class="nav-tile active" onclick="handleNavigation('compare-dashboard')">
                     <div class="nav-tile-icon">📈</div>
                     <h3>Compare Risk Databases & Generate Dashboard</h3>
-                    <p>Visualize risk comparisons through interactive dashboards</p>
+                    <p>Upload two risk registers, compare them, and generate an interactive dashboard with charts, trends and KPI analysis</p>
                 </div>
 
                 <div class="nav-tile" onclick="handleNavigation('knowledge-base')">
@@ -394,32 +382,32 @@
             <!-- Compare & Dashboard Form -->
             <div id="compare-dashboard-form" class="form-section active">
                 <div class="section-title">
-                    <div class="section-icon">📈</div>
+                    <div class="section-icon">📊</div>
                     Risk Register Comparison & Dashboard Generation
                 </div>
                 
-                <div class="file-upload" onclick="document.getElementById('dashboard-file1').click()">
+                <div class="file-upload" onclick="document.getElementById('file1').click()">
                     <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
                     <h3>Upload First Risk Register (Period 1)</h3>
                     <p>Click to select or drag & drop (.xlsx, .csv, .xls)</p>
-                    <input type="file" id="dashboard-file1" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleDashboardFileUpload(1, this)">
-                    <div id="dashboard-file1-info" style="margin-top: 10px; font-weight: bold; color: #4299e1;"></div>
+                    <input type="file" id="file1" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(1, this)">
+                    <div id="file1-info" style="margin-top: 10px; font-weight: bold; color: #4299e1;"></div>
                 </div>
 
-                <div class="file-upload" onclick="document.getElementById('dashboard-file2').click()">
+                <div class="file-upload" onclick="document.getElementById('file2').click()">
                     <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
                     <h3>Upload Second Risk Register (Period 2)</h3>
                     <p>Click to select or drag & drop (.xlsx, .csv, .xls)</p>
-                    <input type="file" id="dashboard-file2" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleDashboardFileUpload(2, this)">
-                    <div id="dashboard-file2-info" style="margin-top: 10px; font-weight: bold; color: #4299e1;"></div>
+                    <input type="file" id="file2" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(2, this)">
+                    <div id="file2-info" style="margin-top: 10px; font-weight: bold; color: #4299e1;"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="dashboardComparisonContext">Comparison Context (Optional)</label>
-                    <textarea id="dashboardComparisonContext" placeholder="Provide context about what changed between these periods, specific areas to focus on, project details, or any other relevant information for the dashboard generation..."></textarea>
+                    <label for="comparisonContext">Comparison Context (Optional)</label>
+                    <textarea id="comparisonContext" placeholder="Provide context about what changed between these periods, specific areas to focus on, project details, or any other relevant information for the dashboard generation..."></textarea>
                 </div>
 
-                <button class="submit-button" onclick="compareAndGenerateDashboard()" disabled id="dashboardCompareBtn">📈 Compare & Generate Interactive Dashboard</button>
+                <button class="submit-button" onclick="compareAndGenerateDashboard()" disabled id="compareBtn">📈 Compare & Generate Interactive Dashboard</button>
             </div>
 
             <div class="loading" id="loading">
@@ -440,10 +428,10 @@
     </div>
 
     <script>
-        let dashboardFiles = { file1: null, file2: null };
+        let uploadedFiles = { file1: null, file2: null };
         let lastDashboard = null;
 
-        // ✅ CORRECTE WEBHOOK URL - exact zoals in je n8n workflow
+        // ✅ CORRECTED WEBHOOK URL - Remove duplicate webhook-test
         const DASHBOARD_WEBHOOK_URL = 'https://riskapp.app.n8n.cloud/webhook-test/risk-dashboard';
 
         function handleNavigation(section) {
@@ -463,7 +451,7 @@
             }
         }
 
-        function handleDashboardFileUpload(fileNumber, input) {
+        function handleFileUpload(fileNumber, input) {
             const file = input.files[0];
             if (!file) return;
             
@@ -482,41 +470,41 @@
                 return;
             }
             
-            dashboardFiles[`file${fileNumber}`] = file;
-            document.getElementById(`dashboard-file${fileNumber}-info`).textContent = `✅ ${file.name}`;
+            uploadedFiles[`file${fileNumber}`] = file;
+            document.getElementById(`file${fileNumber}-info`).textContent = `✅ ${file.name}`;
             
             // Enable compare button if both files uploaded
-            if (dashboardFiles.file1 && dashboardFiles.file2) {
-                document.getElementById('dashboardCompareBtn').disabled = false;
-                document.getElementById('dashboardCompareBtn').textContent = '📈 Compare & Generate Interactive Dashboard';
+            if (uploadedFiles.file1 && uploadedFiles.file2) {
+                document.getElementById('compareBtn').disabled = false;
+                document.getElementById('compareBtn').textContent = '📈 Compare & Generate Interactive Dashboard';
             }
         }
 
         async function compareAndGenerateDashboard() {
-            if (!dashboardFiles.file1 || !dashboardFiles.file2) {
+            if (!uploadedFiles.file1 || !uploadedFiles.file2) {
                 alert('Please upload both risk registers before generating dashboard.');
                 return;
             }
 
             // Convert files to base64
-            const file1Base64 = await fileToBase64(dashboardFiles.file1);
-            const file2Base64 = await fileToBase64(dashboardFiles.file2);
+            const file1Base64 = await fileToBase64(uploadedFiles.file1);
+            const file2Base64 = await fileToBase64(uploadedFiles.file2);
 
             const formData = {
-                mode: 'generate_dashboard',
+                mode: 'generate_dashboard', // Changed to use dashboard generation
                 file1: {
-                    name: dashboardFiles.file1.name,
+                    name: uploadedFiles.file1.name,
                     content: file1Base64,
-                    type: dashboardFiles.file1.type,
-                    size: dashboardFiles.file1.size
+                    type: uploadedFiles.file1.type,
+                    size: uploadedFiles.file1.size
                 },
                 file2: {
-                    name: dashboardFiles.file2.name,
+                    name: uploadedFiles.file2.name,
                     content: file2Base64,
-                    type: dashboardFiles.file2.type,
-                    size: dashboardFiles.file2.size
+                    type: uploadedFiles.file2.type,
+                    size: uploadedFiles.file2.size
                 },
-                comparisonContext: document.getElementById('dashboardComparisonContext').value,
+                comparisonContext: document.getElementById('comparisonContext').value,
                 dashboardType: 'comparison',
                 chartTypes: ['risk-distribution', 'timeline', 'severity', 'trends'],
                 colorScheme: 'professional',
